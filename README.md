@@ -1,6 +1,6 @@
 # Android HTML rendering library
 
-[![](https://jitpack.io/v/iAmMONK/HtmlSpanner.svg)](https://jitpack.io/#iAmMONK/HtmlSpanner)
+[![](https://jitpack.io/v/iAmMONK/Spansimple.svg)](https://jitpack.io/#iAmMONK/Spansimple)
 
 Inspired by:
 
