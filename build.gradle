@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.1.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
+    }
+
+}
+
+allprojects {
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+}
+
+apply plugin: 'com.android.library'
+
+dependencies {
+    implementation 'net.sourceforge.htmlcleaner:htmlcleaner:2.26'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.6.10"
+}
+
+android {
+
+    compileSdkVersion 32
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 32
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+android {
+    lintOptions {
+         abortOnError false
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+artifacts {
+    archives sourcesJar
+}
