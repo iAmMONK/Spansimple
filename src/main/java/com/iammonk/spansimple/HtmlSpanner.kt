@@ -14,22 +14,25 @@ import org.htmlcleaner.HtmlCleaner
 import org.htmlcleaner.TagNode
 
 class HtmlSpanner(
-    settings: SpanningSettings.() -> Unit
+    settings: (SpanningSettings.() -> Unit)? = null
 ) {
-    private val _settings: SpanningSettings = SpanningSettings().apply(settings)
+    private val _settings: SpanningSettings = SpanningSettings()
     private val handlers: MutableMap<String, TagNodeHandler> = mutableMapOf()
     private val htmlCleaner: HtmlCleaner = createHtmlCleaner()
 
     init {
+        settings?.let(_settings::apply)
         registerBuiltInHandlers()
     }
+
+    operator fun invoke(html: String) = fromHtml(html)
 
     private fun registerHandler(tagName: String, handler: TagNodeHandler) {
         handlers[tagName] = handler
         handler.settings = _settings
     }
 
-    fun unregisterHandler(tagName: String) {
+    private fun unregisterHandler(tagName: String) {
         handlers.remove(tagName)
     }
 
@@ -37,7 +40,7 @@ class HtmlSpanner(
         return fromTagNode(htmlCleaner.clean(html), null)
     }
 
-    fun fromHtml(html: String, css: String): Spannable {
+    private fun fromHtml(html: String, css: String): Spannable {
         return fromTagNode(htmlCleaner.clean(html), css)
     }
 
