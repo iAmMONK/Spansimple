@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2011 Alex Kuiper <http://www.nightwhistler.net>
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.iammonk.spansimple
 
 import android.text.Spannable
@@ -30,44 +15,10 @@ import org.htmlcleaner.ContentNode
 import org.htmlcleaner.HtmlCleaner
 import org.htmlcleaner.TagNode
 
-class HtmlSpanner @JvmOverloads constructor(
-    private val htmlCleaner: HtmlCleaner = createHtmlCleaner(),
-    var fontResolver: FontResolver = SystemFontResolver()
-) {
-    private val handlers: MutableMap<String, TagNodeHandler>
-    /**
-     * Returns if whitespace is being stripped.
-     */
-    /**
-     * Switch to specify whether excess whitespace should be stripped from the
-     * input.
-     */
-    var isStripExtraWhiteSpace = false
-    /**
-     * Indicates whether the text style may be updated.
-     *
-     *
-     * If this is set to false, all CSS is ignored
-     * and the basic built-in style is used.
-     */
-    /**
-     * Switch to specify is CSS style should be used.
-     */
-    /**
-     * Switch to determine if CSS is used
-     */
-    var isAllowStyling = true
-
-    /**
-     * Switch to specify if the colours from CSS
-     * should override user-specified colours.
-     *
-     * If CSS colours are used
-     */
-    var isUseColoursFromStyle = true
-    fun getFont(name: String?): FontFamily? {
-        return fontResolver.getFont(name)
-    }
+class HtmlSpanner {
+    private val handlers: MutableMap<String, TagNodeHandler> = mutableMapOf()
+    private val settings: SpanningSettings = SpanningSettings()
+    private val htmlCleaner: HtmlCleaner = createHtmlCleaner()
 
     /**
      * Registers a new custom TagNodeHandler.
@@ -77,7 +28,7 @@ class HtmlSpanner @JvmOverloads constructor(
      */
     private fun registerHandler(tagName: String, handler: TagNodeHandler) {
         handlers[tagName] = handler
-        handler.spanner = this
+        handler.settings = settings
     }
 
     /**
@@ -115,7 +66,7 @@ class HtmlSpanner @JvmOverloads constructor(
         }
 
         applySpan(result, node, stack)
-        stack.applySpans(this, result)
+        stack.applySpans(settings, result)
         return result
     }
 
@@ -136,7 +87,7 @@ class HtmlSpanner @JvmOverloads constructor(
         val result = SpannableStringBuilder()
         val stack = SpanStack()
         applySpan(result, node, stack)
-        stack.applySpans(this, result)
+        stack.applySpans(settings, result)
         return result
     }
 
@@ -147,7 +98,7 @@ class HtmlSpanner @JvmOverloads constructor(
         var text = replaceHtmlEntities(
             contentNode.content, false
         )
-        if (isStripExtraWhiteSpace) {
+        if (settings.isStripExtraWhiteSpace) {
             //Replace unicode non-breaking space with normal space.
             text = text.replace('\u00A0', ' ')
         }
@@ -162,7 +113,7 @@ class HtmlSpanner @JvmOverloads constructor(
         var handler = handlers[node.name]
         if (handler == null) {
             handler = StyledTextHandler()
-            handler.spanner = this
+            handler.settings = settings
         }
         val lengthBefore = builder.length
         handler.beforeChildren(node, builder, stack)
@@ -180,34 +131,14 @@ class HtmlSpanner @JvmOverloads constructor(
     }
 
     private fun registerBuiltInHandlers() {
-        val italicHandler: TagNodeHandler = StyledTextHandler(
-            Style().setFontStyle(Style.FontStyle.ITALIC)
-        )
-        registerHandler("i", italicHandler)
-        registerHandler("em", italicHandler)
-        registerHandler("cite", italicHandler)
-        registerHandler("dfn", italicHandler)
-        val boldHandler: TagNodeHandler = StyledTextHandler(
-            Style().setFontWeight(Style.FontWeight.BOLD)
-        )
-        registerHandler("b", boldHandler)
-        registerHandler("strong", boldHandler)
-        val marginHandler: TagNodeHandler = StyledTextHandler(
-            Style().setMarginLeft(StyleValue(2.0f, StyleValue.Unit.EM))
-        )
-        registerHandler("blockquote", marginHandler)
-        registerHandler("ul", marginHandler)
-        registerHandler("ol", marginHandler)
+        val italicHandler: TagNodeHandler =
+            StyledTextHandler(Style().setFontStyle(Style.FontStyle.ITALIC))
+        val boldHandler: TagNodeHandler =
+            StyledTextHandler(Style().setFontWeight(Style.FontWeight.BOLD))
+        val marginHandler: TagNodeHandler =
+            StyledTextHandler(Style().setMarginLeft(StyleValue(2.0f, StyleValue.Unit.EM)))
         val monSpaceHandler: TagNodeHandler = wrap(MonoSpaceHandler())
-        registerHandler("tt", monSpaceHandler)
-        registerHandler("code", monSpaceHandler)
-        registerHandler("style", StyleNodeHandler())
-
-        //We wrap an alignment-handler to support
-        //align attributes
-        val inlineAlignment = wrap(StyledTextHandler())
-        val brHandler: TagNodeHandler = NewLineHandler(1, inlineAlignment)
-        registerHandler("br", brHandler)
+        val brHandler: TagNodeHandler = NewLineHandler(wrap(StyledTextHandler()))
         val paragraphStyle = Style()
             .setDisplayStyle(Style.DisplayStyle.BLOCK)
             .setMarginBottom(
@@ -215,6 +146,31 @@ class HtmlSpanner @JvmOverloads constructor(
             )
         val pHandler: TagNodeHandler =
             BorderAttributeHandler(wrap(StyledTextHandler(paragraphStyle)))
+        val preHandler: TagNodeHandler = PreHandler()
+        val bigHandler: TagNodeHandler =
+            StyledTextHandler(Style().setFontSize(StyleValue(1.25f, StyleValue.Unit.EM)))
+        val smallHandler: TagNodeHandler =
+            StyledTextHandler(Style().setFontSize(StyleValue(0.8f, StyleValue.Unit.EM)))
+        val subHandler: TagNodeHandler = SubScriptHandler()
+        val superHandler: TagNodeHandler = SuperScriptHandler()
+        val centerHandler: TagNodeHandler =
+            StyledTextHandler(Style().setTextAlignment(Style.TextAlignment.CENTER))
+        val spanStyle = Style().setDisplayStyle(Style.DisplayStyle.INLINE)
+        val spanHandler: TagNodeHandler = BorderAttributeHandler(wrap(StyledTextHandler(spanStyle)))
+
+        registerHandler("i", italicHandler)
+        registerHandler("em", italicHandler)
+        registerHandler("cite", italicHandler)
+        registerHandler("dfn", italicHandler)
+        registerHandler("b", boldHandler)
+        registerHandler("strong", boldHandler)
+        registerHandler("blockquote", marginHandler)
+        registerHandler("ul", marginHandler)
+        registerHandler("ol", marginHandler)
+        registerHandler("tt", monSpaceHandler)
+        registerHandler("code", monSpaceHandler)
+        registerHandler("style", StyleNodeHandler())
+        registerHandler("br", brHandler)
         registerHandler("p", pHandler)
         registerHandler("div", pHandler)
         registerHandler("h1", wrap(HeaderHandler(1.5f, 0.5f)))
@@ -223,33 +179,16 @@ class HtmlSpanner @JvmOverloads constructor(
         registerHandler("h4", wrap(HeaderHandler(1.2f, 0.8f)))
         registerHandler("h5", wrap(HeaderHandler(1.1f, 0.9f)))
         registerHandler("h6", wrap(HeaderHandler(1f, 1f)))
-        val preHandler: TagNodeHandler = PreHandler()
         registerHandler("pre", preHandler)
-        val bigHandler: TagNodeHandler = StyledTextHandler(
-            Style().setFontSize(
-                StyleValue(1.25f, StyleValue.Unit.EM)
-            )
-        )
         registerHandler("big", bigHandler)
-        val smallHandler: TagNodeHandler = StyledTextHandler(
-            Style().setFontSize(
-                StyleValue(0.8f, StyleValue.Unit.EM)
-            )
-        )
         registerHandler("small", smallHandler)
-        val subHandler: TagNodeHandler = SubScriptHandler()
         registerHandler("sub", subHandler)
-        val superHandler: TagNodeHandler = SuperScriptHandler()
         registerHandler("sup", superHandler)
-        val centerHandler: TagNodeHandler =
-            StyledTextHandler(Style().setTextAlignment(Style.TextAlignment.CENTER))
         registerHandler("center", centerHandler)
         registerHandler("li", ListItemHandler())
         registerHandler("a", LinkHandler())
         registerHandler("img", ImageHandler())
         registerHandler("font", FontHandler())
-        val spanStyle = Style().setDisplayStyle(Style.DisplayStyle.INLINE)
-        val spanHandler: TagNodeHandler = BorderAttributeHandler(wrap(StyledTextHandler(spanStyle)))
         registerHandler("span", spanHandler)
     }
 
@@ -281,14 +220,11 @@ class HtmlSpanner @JvmOverloads constructor(
     /**
      * Creates a new HtmlSpanner using the given HtmlCleaner instance.
      *
-     *
      * This allows for a custom-configured HtmlCleaner.
-     */
-    /**
+     *
      * Creates a new HtmlSpanner using a default HtmlCleaner instance.
      */
     init {
-        handlers = HashMap()
         registerBuiltInHandlers()
     }
 }

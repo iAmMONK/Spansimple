@@ -27,8 +27,8 @@ class PreHandler : TagNodeHandler() {
         val buffer = StringBuffer()
         getPlainText(buffer, node)
         builder.append(buffer.toString())
-        val monoSpace = spanner!!.fontResolver.monoSpaceFont
-        spanStack.pushSpan(FontFamilySpan(monoSpace!!), start, builder.length)
+        val monoSpace = settings.fontResolver.monoSpaceFont
+        spanStack.pushSpan(FontFamilySpan(monoSpace), start, builder.length)
         appendNewLine(builder)
         appendNewLine(builder)
     }

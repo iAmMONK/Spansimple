@@ -16,11 +16,11 @@ class FontHandler : StyledTextHandler(Style()) {
         start: Int, end: Int, useStyle: Style, stack: SpanStack
     ) {
         var mStyle = useStyle
-        if (spanner!!.isAllowStyling) {
+        if (settings.isAllowStyling) {
             val face = node.getAttributeByName("face")
             val size = node.getAttributeByName("size")
             val color = node.getAttributeByName("color")
-            val family = spanner!!.getFont(face)
+            val family = settings.fontResolver.getFont(face)
             mStyle = mStyle.setFontFamily(family)
             if (size != null) {
                 val updater: StyleUpdater? = getStyleUpdater("font-size", size)
@@ -28,7 +28,7 @@ class FontHandler : StyledTextHandler(Style()) {
                     mStyle = updater(mStyle)
                 }
             }
-            if (color != null && spanner!!.isUseColoursFromStyle) {
+            if (color != null && settings.isUseColoursFromStyle) {
                 val updater = getStyleUpdater("color", color)
                 if (updater != null) {
                     mStyle = updater(mStyle)

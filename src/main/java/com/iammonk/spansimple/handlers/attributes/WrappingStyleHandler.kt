@@ -25,11 +25,4 @@ open class WrappingStyleHandler(private val wrappedHandler: StyledTextHandler) :
     ) {
         wrappedHandler.handleTagNode(node, builder, start, end, useStyle, stack)
     }
-
-    override var spanner: HtmlSpanner?
-        get() = super.spanner
-        set(spanner) {
-            super.spanner = spanner
-            wrappedHandler.spanner = spanner
-        }
 }

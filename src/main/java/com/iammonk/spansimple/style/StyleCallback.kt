@@ -6,6 +6,7 @@ import android.text.style.*
 import com.iammonk.spansimple.FontFamily
 import com.iammonk.spansimple.HtmlSpanner
 import com.iammonk.spansimple.SpanCallback
+import com.iammonk.spansimple.SpanningSettings
 import com.iammonk.spansimple.spans.*
 import com.iammonk.spansimple.style.Style.TextAlignment
 import kotlin.math.min
@@ -16,7 +17,7 @@ class StyleCallback(
     private val start: Int,
     private val end: Int
 ) : SpanCallback {
-    override fun applySpan(spanner: HtmlSpanner, builder: SpannableStringBuilder) {
+    override fun applySpan(settings: SpanningSettings, builder: SpannableStringBuilder) {
         if (useStyle.fontFamily != null || useStyle.fontStyle != null || useStyle.fontWeight != null) {
             val originalSpan = getFontFamilySpan(builder, start, end)
             val newSpan: FontFamilySpan = when {
@@ -42,7 +43,7 @@ class StyleCallback(
         }
 
         //If there's no border, we use a BackgroundColorSpan to draw colour behind the text
-        if (spanner.isUseColoursFromStyle && useStyle.backgroundColor != null && useStyle.borderStyle == null) {
+        if (settings.isUseColoursFromStyle && useStyle.backgroundColor != null && useStyle.borderStyle == null) {
             builder.setSpan(
                 BackgroundColorSpan(useStyle.backgroundColor),
                 start,
@@ -54,7 +55,7 @@ class StyleCallback(
         //If there is a border, the BorderSpan will also draw the background colour if needed.
         if (useStyle.borderStyle != null) {
             builder.setSpan(
-                BorderSpan(useStyle, start, end, spanner.isUseColoursFromStyle), start, end,
+                BorderSpan(useStyle, start, end, settings.isUseColoursFromStyle), start, end,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
@@ -76,7 +77,7 @@ class StyleCallback(
                 }
             }
         }
-        if (spanner.isUseColoursFromStyle && useStyle.color != null) {
+        if (settings.isUseColoursFromStyle && useStyle.color != null) {
             builder.setSpan(
                 ForegroundColorSpan(useStyle.color), start, end,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

@@ -17,11 +17,4 @@ open class WrappingHandler(private val wrappedHandler: TagNodeHandler) : TagNode
     ) {
         wrappedHandler.handleTagNode(node, builder, start, end, spanStack)
     }
-
-    override var spanner: HtmlSpanner?
-        get() = super.spanner
-        set(spanner) {
-            super.spanner = spanner
-            wrappedHandler.spanner = spanner
-        }
 }

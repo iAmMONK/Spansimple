@@ -4,7 +4,6 @@ import android.graphics.Typeface
 
 class SystemFontResolver : FontResolver {
 
-
     override var defaultFont: FontFamily = FontFamily("default", Typeface.DEFAULT)
     override var serifFont: FontFamily = FontFamily("serif", Typeface.SERIF)
     override var sansSerifFont: FontFamily = FontFamily("sans-serif", Typeface.SANS_SERIF)

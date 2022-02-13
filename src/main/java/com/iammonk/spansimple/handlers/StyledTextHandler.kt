@@ -98,8 +98,10 @@ open class StyledTextHandler @JvmOverloads constructor(
         if (builder.length > start) {
             stack.pushSpan(
                 StyleCallback(
-                    spanner!!.fontResolver
-                        .defaultFont!!, useStyle, start, builder.length
+                    defaultFont = settings.fontResolver.defaultFont,
+                    useStyle = useStyle,
+                    start = start,
+                    end = builder.length
                 )
             )
         }

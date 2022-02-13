@@ -14,7 +14,7 @@ class BorderAttributeHandler(handler: StyledTextHandler) : WrappingStyleHandler(
     ) {
         if (node.getAttributeByName("border") != null) {
             stack.pushSpan(
-                BorderSpan(useStyle, start, end, spanner!!.isUseColoursFromStyle),
+                BorderSpan(useStyle, start, end, settings.isUseColoursFromStyle),
                 start,
                 end
             )

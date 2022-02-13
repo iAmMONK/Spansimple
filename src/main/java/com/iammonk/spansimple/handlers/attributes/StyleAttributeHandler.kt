@@ -13,7 +13,7 @@ class StyleAttributeHandler(wrapHandler: StyledTextHandler) : WrappingStyleHandl
         stack: SpanStack
     ) {
         val styleAttr = node.getAttributeByName("style")
-        if (spanner!!.isAllowStyling && styleAttr != null) {
+        if (settings.isAllowStyling && styleAttr != null) {
             super.handleTagNode(
                 node, builder, start, end,
                 parseStyleFromAttribute(useStyle, styleAttr),

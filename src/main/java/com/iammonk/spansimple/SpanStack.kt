@@ -36,7 +36,7 @@ class SpanStack {
     fun pushSpan(span: Any?, start: Int, end: Int) {
         if (end > start) {
             val callback = object : SpanCallback {
-                override fun applySpan(spanner: HtmlSpanner, builder: SpannableStringBuilder) {
+                override fun applySpan(settings: SpanningSettings, builder: SpannableStringBuilder) {
                     builder.setSpan(
                         span, start, end,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -51,9 +51,9 @@ class SpanStack {
         spanItemStack.push(callback)
     }
 
-    fun applySpans(spanner: HtmlSpanner, builder: SpannableStringBuilder) {
+    fun applySpans(settings: SpanningSettings, builder: SpannableStringBuilder) {
         while (!spanItemStack.isEmpty()) {
-            spanItemStack.pop().applySpan(spanner, builder)
+            spanItemStack.pop().applySpan(settings, builder)
         }
     }
 }

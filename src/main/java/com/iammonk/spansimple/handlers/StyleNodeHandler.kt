@@ -16,7 +16,7 @@ class StyleNodeHandler : TagNodeHandler() {
         end: Int,
         spanStack: SpanStack
     ) {
-        if (spanner!!.isAllowStyling) {
+        if (settings.isAllowStyling) {
             if (node.allChildren.size == 1) {
                 val childNode: Any = node.allChildren[0]
                 if (childNode is ContentNode) {
