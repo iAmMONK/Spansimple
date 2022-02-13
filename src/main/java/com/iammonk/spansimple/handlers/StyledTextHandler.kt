@@ -3,6 +3,8 @@ package com.iammonk.spansimple.handlers
 import android.text.SpannableStringBuilder
 import com.iammonk.spansimple.SpanStack
 import com.iammonk.spansimple.TagNodeHandler
+import com.iammonk.spansimple.handlers.attributes.AlignmentAttributeHandler
+import com.iammonk.spansimple.handlers.attributes.StyleAttributeHandler
 import com.iammonk.spansimple.spans.VerticalMarginSpan
 import com.iammonk.spansimple.style.Style
 import com.iammonk.spansimple.style.StyleCallback
@@ -21,7 +23,7 @@ open class StyledTextHandler @JvmOverloads constructor(
         spanStack: SpanStack
     ) {
         val useStyle = spanStack.getStyle(node, _style)
-        if (builder.isNotEmpty() && useStyle.displayStyle === Style.DisplayStyle.BLOCK) {
+        if (builder.isNotEmpty() && useStyle.displayStyle == Style.DisplayStyle.BLOCK) {
             if (builder[builder.length - 1] != '\n') {
                 builder.append('\n')
             }
@@ -106,4 +108,6 @@ open class StyledTextHandler @JvmOverloads constructor(
             )
         }
     }
+
+    val wrapped get() = StyleAttributeHandler(AlignmentAttributeHandler(this))
 }

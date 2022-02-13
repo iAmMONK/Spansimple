@@ -5,18 +5,9 @@ import android.graphics.Paint
 import android.text.Layout
 import android.text.Spanned
 import android.text.style.LeadingMarginSpan
-import com.iammonk.spansimple.HtmlSpanner
+import com.iammonk.spansimple.style.Style
 
-class ListItemSpan : LeadingMarginSpan {
-    private val mNumber: Int
-
-    constructor() {
-        mNumber = -1
-    }
-
-    constructor(number: Int) {
-        mNumber = number
-    }
+class ListItemSpan @JvmOverloads constructor(private val mNumber: Int = -1) : LeadingMarginSpan {
 
     override fun getLeadingMargin(first: Boolean): Int {
         return if (mNumber != -1) {
@@ -48,6 +39,6 @@ class ListItemSpan : LeadingMarginSpan {
         private const val NUMBER_RADIUS = 5
 
         //Gap should be about 1em
-        const val STANDARD_GAP_WIDTH = HtmlSpanner.HORIZONTAL_EM_WIDTH
+        const val STANDARD_GAP_WIDTH = Style.HORIZONTAL_EM_WIDTH
     }
 }

@@ -1,7 +1,6 @@
 package com.iammonk.spansimple.handlers.attributes
 
 import android.text.SpannableStringBuilder
-import com.iammonk.spansimple.HtmlSpanner
 import com.iammonk.spansimple.SpanStack
 import com.iammonk.spansimple.handlers.StyledTextHandler
 import com.iammonk.spansimple.style.Style

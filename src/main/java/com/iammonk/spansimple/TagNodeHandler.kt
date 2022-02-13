@@ -5,15 +5,7 @@ import org.htmlcleaner.TagNode
 
 
 abstract class TagNodeHandler {
-    /**
-     * Returns a reference to the HtmlSpanner.
-     *
-     * @return the HtmlSpanner;
-     */
-    /**
-     * Called by HtmlSpanner when this TagNodeHandler is registered.
-     */
-    open var spanner: HtmlSpanner? = null
+
     open var settings: SpanningSettings = SpanningSettings()
 
     /**

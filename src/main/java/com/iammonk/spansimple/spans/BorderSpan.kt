@@ -3,7 +3,6 @@ package com.iammonk.spansimple.spans
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.text.style.LineBackgroundSpan
-import com.iammonk.spansimple.HtmlSpanner
 import com.iammonk.spansimple.style.Style
 import com.iammonk.spansimple.style.StyleValue
 
@@ -30,7 +29,7 @@ class BorderSpan(
                     baseMargin = styleValue.intValue
                 }
             } else if (styleValue.floatValue > 0f) {
-                baseMargin = (styleValue.floatValue * HtmlSpanner.HORIZONTAL_EM_WIDTH).toInt()
+                baseMargin = (styleValue.floatValue * Style.HORIZONTAL_EM_WIDTH).toInt()
             }
 
             //Leave a little bit of room

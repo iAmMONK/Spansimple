@@ -23,6 +23,15 @@ class Style {
         SOLID, DASHED, DOTTED, DOUBLE
     }
 
+    companion object {
+        /**
+         * Temporary constant for the width of 1 horizontal em
+         * Used for calculating margins.
+         */
+        const val HORIZONTAL_EM_WIDTH = 10
+    }
+
+
     val fontFamily: FontFamily?
     val textAlignment: TextAlignment?
     val fontSize: StyleValue?

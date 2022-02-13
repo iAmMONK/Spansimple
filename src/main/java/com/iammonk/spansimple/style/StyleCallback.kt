@@ -4,7 +4,6 @@ import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.*
 import com.iammonk.spansimple.FontFamily
-import com.iammonk.spansimple.HtmlSpanner
 import com.iammonk.spansimple.SpanCallback
 import com.iammonk.spansimple.SpanningSettings
 import com.iammonk.spansimple.spans.*
@@ -112,7 +111,7 @@ class StyleCallback(
                 if (styleValue.floatValue > 0f) {
                     builder.setSpan(
                         LeadingMarginSpan.Standard(
-                            (HtmlSpanner.HORIZONTAL_EM_WIDTH * styleValue.floatValue).toInt(),
+                            (Style.HORIZONTAL_EM_WIDTH * styleValue.floatValue).toInt(),
                             0
                         ), marginStart, marginEnd,
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -133,7 +132,7 @@ class StyleCallback(
             } else if (styleValue.floatValue > 0f) {
                 builder.setSpan(
                     LeadingMarginSpan.Standard(
-                        (HtmlSpanner.HORIZONTAL_EM_WIDTH * styleValue.floatValue).toInt()
+                        (Style.HORIZONTAL_EM_WIDTH * styleValue.floatValue).toInt()
                     ), start, end,
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
                 )

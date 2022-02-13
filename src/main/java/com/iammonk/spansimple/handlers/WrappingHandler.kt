@@ -1,7 +1,6 @@
 package com.iammonk.spansimple.handlers
 
 import android.text.SpannableStringBuilder
-import com.iammonk.spansimple.HtmlSpanner
 import com.iammonk.spansimple.SpanStack
 import com.iammonk.spansimple.TagNodeHandler
 import org.htmlcleaner.TagNode

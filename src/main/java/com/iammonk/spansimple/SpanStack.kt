@@ -18,13 +18,7 @@ class SpanStack {
 
     fun getStyle(node: TagNode, baseStyle: Style): Style {
         if (!lookupCache.containsKey(node)) {
-            val matchingRules: MutableList<CompiledRule> = ArrayList()
-            for (rule in rules) {
-                if (rule.matches(node)) {
-                    matchingRules.add(rule)
-                }
-            }
-            lookupCache[node] = matchingRules
+            lookupCache[node] = rules.filter { rule -> rule.matches(node) }
         }
         var result = baseStyle
         lookupCache[node]?.forEach {
