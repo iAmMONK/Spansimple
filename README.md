@@ -52,9 +52,9 @@ are parsed by default, and the style of all built-in tags can be updated.
 
 # Supported Style Attributes
 
-* font-family
+* ~~font-family~~ currently removed but let me know if you need it
 * text-alignment
-* font-size
+* ~~font-size~~ currently removed but let me know if you need it
 * font-weight
 * font-style
 * color
@@ -75,10 +75,25 @@ are parsed by default, and the style of all built-in tags can be updated.
 
 2. In app module ``build.gradle`` add following dependency
 
-``implementation 'com.github.iAmMONK:HtmlSpanner:$spannerVersion'``
+``implementation 'com.github.iAmMONK:Spansimple:0.1.3'``
 
-3. In its simplest form, just call 
-   ``(new HtmlSpanner()).fromHtml()`` for Java
-   or 
-   ``HtmlSpanner().fromHtml()`` for Kotlin
-   to get similar output as Android's ``Html.fromHtml()``.
+3. In its simplest form, just call  
+   ``HtmlSpanner()(html)`` Yes it's not a typo  
+   or  
+   ``HtmlSpanner().fromHtml(html)``
+
+   There are also some settings available:  
+   ``isAllowStyling`` - specify if CSS styling should be used. Default = ``true``  
+   ``isStripExtraWhiteSpace`` - specify if extra spaces should be stripped from the input. Default = ``false``  
+   ``isUseColoursFromStyle`` - specify if colors from CSS colours should be used. Default = ``true``  
+   
+   To modify these settings, use the constructor with settings. Example:
+   ```
+   HtmlSpanner {
+      isAllowStyling = false
+      isStripExtraWhiteSpace = true
+      isUseColoursFromStyle = false
+   }(html)
+   ```
+   Note: You don't need to specify all 3, only those that you want to change.
+
