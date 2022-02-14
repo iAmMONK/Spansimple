@@ -75,7 +75,7 @@ are parsed by default, and the style of all built-in tags can be updated.
 
 2. In app module ``build.gradle`` add following dependency
 
-``implementation 'com.github.iAmMONK:Spansimple:0.1.3'``
+``implementation 'com.github.iAmMONK:Spansimple:0.1.4'``
 
 3. In its simplest form, just call  
    ``HtmlSpanner()(html)`` Yes it's not a typo  
